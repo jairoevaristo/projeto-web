@@ -1,17 +1,25 @@
 const container = document.querySelector("#eye");
 const containerConfirmar = document.querySelector("#eye-confirmar");
 
-const inputSenha = document.querySelector("#password");
+const inputSenha = document.querySelector("#senha");
 const inputSenhaConfirmar = document.querySelector("#password-confirmar");
 const buttonSubmit = document.querySelector("#button-submit");
 
-const inputFile = document.querySelector("#input-file");
 const imageProfile = document.querySelector("#image");
 
 const spanMessage = document.querySelector("#span-message");
 const spanMessageSenha = document.querySelector("#span-message-senha");
 
+const nome = document.querySelector("#nome");
+const email = document.querySelector("#email");
+const data_nascimento = document.querySelector("#data_nascimento");
+const telefone = document.querySelector("#telefone");
+const genero = document.querySelector("#genero");
+const senha = document.querySelector("#senha");
+const avatar = document.querySelector("#avatar");
+
 const typeImages = ["image/png", "image/jpg"];
+let storedFiles = [];
 
 let isEye = false;
 let isEyeConfirmar = false;
@@ -50,27 +58,52 @@ containerConfirmar.addEventListener("click", () => {
   }
 });
 
-inputFile.addEventListener("change", (e) => {
+avatar.addEventListener("change", (e) => {
   if (!typeImages.includes(e.target.files[0].type)) {
     spanMessage.classList.remove("hidden");
     spanMessage.textContent = "Tipo de arquivo não suportado.";
     return;
   }
 
+  let files = e.target.files;
+  storedFiles = Array.from(files);
+
   spanMessage.classList.add("hidden");
 
   imageProfile.src = URL.createObjectURL(e.target.files[0]);
 });
 
-buttonSubmit.addEventListener("submit", (e) => {
-  e.preventDefault();
-  console.log(inputSenhaConfirmar.value);
+buttonSubmit.addEventListener("click", () => {
+  const data = new FormData();
 
   if (inputSenha.value !== inputSenhaConfirmar.value) {
     spanMessageSenha.classList.remove("hidden");
     spanMessageSenha.textContent = "As senhas não são iguais";
-    return;
-  }
+  } else {
+    spanMessageSenha.classList.add("hidden");
 
-  spanMessageSenha.classList.add("hidden");
+    data.append("nome", nome.value);
+    data.append("email", email.value);
+    data.append("data_nascimento", data_nascimento.value);
+    data.append("telefone", telefone.value);
+    data.append("genero", genero.value);
+    data.append("senha", senha.value);
+
+    const len = storedFiles.length;
+    for (let i = 0; i < len; i++) {
+      data.append("avatar", storedFiles[i]);
+    }
+
+    fetch("/signup", {
+      method: "post",
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response._id) {
+          window.location.href = "/";
+        }
+      })
+      .catch((error) => console.log(error));
+  }
 });
