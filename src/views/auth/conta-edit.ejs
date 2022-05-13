@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>CartHend</title>
+</head>
+<body>
+  <div class="container mx-auto max-w-3xl">
+    <div class="flex flex-col mt-[60px]">
+      <h1 class="text-orange-600 text-7xl text-center">Meus Dados</h1>
+
+      <form class="flex flex-col mt-10">
+        <span class="text-lg text-red-400 mb-4 hidden" id="span-message"></span>
+        <div class="flex flex-col w-full justify-center items-center drop-shadow-lg mb-4">
+          <img id="image" class="w-60 h-60 rounded-full" src=<%= user.avatar%> alt="">
+          <input id="avatar" name="avatar" value="Selecionar imagem" type="file" class="text-center mt-4 mb-4 bg-orange-600 p-2 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400" />    
+        </div>
+        
+        <label class="text-sky-800 mb-1">Nome completo</label>
+        <input id="nome" required type="text" value=<%= user.nome%> placeholder="Seu nome completo" name="nome" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+        
+        <label class="text-sky-800 mb-1">Email</label>
+        <input id="email" required type="email" value=<%= user.email%> placeholder="Seu email" name="email" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="text-sky-800 mb-1">Data de Nascimento</label>
+            <input required id="data_nascimento" value=<%= user.data_nascimento%> type="date" name="data_nascimento" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+          </div>
+          
+          <div>
+            <label class="text-sky-800 mb-1">Telefone</label>
+            <input required id="telefone" value=<%= user.telefone%> type="text" placeholder="Seu telefone" name="telefone" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+          </div>
+          
+          <div class="flex flex-col justify-center mt-[-7px]">
+            <label class="text-sky-800 mb-1">Gênero</label>
+            <select required id="genero" name="genero" class="border outline-none border-gray-300 rounded p-3 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out">
+              <option 
+                <%= "masculino" === user.genero ? 'selected' : ''%> 
+                value="masculino"
+              >
+                Masculino
+              </option>
+                <option 
+                <%= "feminino" === user.genero ? 'selected' : ''%> 
+                value="feminino" 
+                >
+                  Feminino
+              </option>
+            </select>
+          </div>
+        </div>
+       
+        </div>
+          <span id="span-message-senha" class="text-lg text-red-400 mb-4 hidden">
+          </span>
+          <div class="flex items-center justify-end w-full p-4">
+            <a href="/loja/conta" class="mr-3 bg-white py-2 px-4 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400">
+              Voltar
+            </a>
+
+            <button type="button" id="button-submit" class="bg-orange-600 py-2 px-4 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400">
+              Editar
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+  <script src="/js/edit.js"></script>
+</body>
+</html>

@@ -8,6 +8,7 @@ const buttonSubmit = document.querySelector("#button-submit");
 const imageProfile = document.querySelector("#image");
 
 const spanMessage = document.querySelector("#span-message");
+const spanMessageEmail = document.querySelector("#span-message-email");
 const spanMessageSenha = document.querySelector("#span-message-senha");
 
 const nome = document.querySelector("#nome");
@@ -102,6 +103,9 @@ buttonSubmit.addEventListener("click", () => {
       .then((response) => {
         if (response._id) {
           window.location.href = "/";
+        } else {
+          spanMessage.classList.remove("hidden");
+          spanMessage.textContent = response.message;
         }
       })
       .catch((error) => console.log(error));

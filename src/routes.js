@@ -14,7 +14,8 @@ routes.get("/", (req, res) => {
 });
 
 routes.get("/signin", (req, res) => {
-  return res.render("login");
+  const message = req.flash("login-error");
+  return res.render("login", { message });
 });
 
 routes.get("/signup", (req, res) => {
@@ -39,20 +40,23 @@ routes.post(
       avatar,
       senha,
     });
-    console.log(user);
     return res.json(user);
   }
 );
 
 routes.post("/signin", async (req, res) => {
   const { email, senha } = req.body;
+  let message = "Email ou senha incorretos";
 
   const user = await userRespository.login(email, senha);
 
   if (user) {
     req.session.user = user;
-    res.redirect("/loja");
+    return res.redirect("/loja");
   }
+
+  req.flash("login-error", message);
+  res.redirect("/signin");
 });
 
 routes.use((req, res, next) => {
@@ -64,7 +68,44 @@ routes.use((req, res, next) => {
 });
 
 routes.get("/loja", (req, res) => {
-  return res.render("loja");
+  return res.render("auth/loja");
 });
+
+routes.get("/loja/conta", async (req, res) => {
+  const { _id } = req.session.user;
+  const user = await userRespository.findUserById(_id);
+
+  return res.render("auth/conta", { user });
+});
+
+routes.get("/loja/conta-editar", async (req, res) => {
+  const { _id } = req.session.user;
+
+  const user = await userRespository.findUserById(_id);
+  return res.render("auth/conta-edit", { user });
+});
+
+module.exports = routes;
+
+routes.post(
+  "/loja/conta-editar",
+  multer(multerConfig).single("avatar"),
+  async (req, res) => {
+    const { nome, email, data_nascimento, telefone, genero } = req.body;
+    const avatar = req.file;
+    const { _id } = req.session.user;
+
+    const user = await userRespository.updateUserById(_id, {
+      nome,
+      email,
+      data_nascimento,
+      telefone,
+      genero,
+      avatar,
+    });
+
+    res.json(user);
+  }
+);
 
 module.exports = routes;
