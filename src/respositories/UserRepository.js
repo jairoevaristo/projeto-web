@@ -74,7 +74,9 @@ class UserRepository {
     { nome, email, data_nascimento, telefone, genero, avatar }
   ) {
     if (avatar) {
-      const saveAvatar = `${process.env.DOMAIN_APP}/user/${avatar.filename}`;
+      const saveAvatar = `${
+        process.env.DOMAIN_APP
+      }/user/${avatar.filename.replace(" ", "-")}`;
       const userUpdate = await User.findByIdAndUpdate(id, {
         nome,
         email,

@@ -67,22 +67,28 @@ routes.use((req, res, next) => {
   next();
 });
 
-routes.get("/loja", (req, res) => {
-  return res.render("auth/loja");
+routes.get("/loja", async (req, res) => {
+  const { _id } = req.session.user;
+  const { avatar, nome } = await userRespository.findUserById(_id);
+
+  return res.render("auth/loja", { avatar, nome });
 });
 
 routes.get("/loja/conta", async (req, res) => {
   const { _id } = req.session.user;
+  const { avatar, nome } = await userRespository.findUserById(_id);
+
   const user = await userRespository.findUserById(_id);
 
-  return res.render("auth/conta", { user });
+  return res.render("auth/conta", { user, avatar, nome });
 });
 
 routes.get("/loja/conta-editar", async (req, res) => {
   const { _id } = req.session.user;
+  const { avatar, nome } = await userRespository.findUserById(_id);
 
   const user = await userRespository.findUserById(_id);
-  return res.render("auth/conta-edit", { user });
+  return res.render("auth/conta-edit", { user, avatar, nome });
 });
 
 module.exports = routes;
@@ -108,11 +114,19 @@ routes.post(
   }
 );
 
-routes.get("/loja/conta-senha", (req, res) => {
+routes.get("/loja/conta-senha", async (req, res) => {
+  const { _id } = req.session.user;
+  const { avatar, nome } = await userRespository.findUserById(_id);
+
   const messageSuccess = req.flash("senha-success");
   const messageError = req.flash("senha-error");
 
-  return res.render("auth/edit-password", { messageError, messageSuccess });
+  return res.render("auth/edit-password", {
+    messageError,
+    messageSuccess,
+    avatar,
+    nome,
+  });
 });
 
 routes.post("/loja/conta-senha", async (req, res) => {

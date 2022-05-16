@@ -10,7 +10,7 @@ module.exports = {
     },
     filename: (req, file, cb) => {
       let fileHash = crypto.randomBytes(8).toString("hex");
-      cb(null, `${fileHash}-${file.originalname}`);
+      cb(null, `${fileHash}-${file.originalname.replace(" ", "-")}`);
     },
   }),
 };
