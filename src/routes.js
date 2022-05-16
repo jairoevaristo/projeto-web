@@ -108,4 +108,34 @@ routes.post(
   }
 );
 
+routes.get("/loja/conta-senha", (req, res) => {
+  const messageSuccess = req.flash("senha-success");
+  const messageError = req.flash("senha-error");
+
+  return res.render("auth/edit-password", { messageError, messageSuccess });
+});
+
+routes.post("/loja/conta-senha", async (req, res) => {
+  const { senha_atual, nova_senha } = req.body;
+  const { _id } = req.session.user;
+
+  let messageSuccess = "Senha alterado com sucesso";
+  let messageError = "Erro ao alterar a senha, tem novamente";
+
+  const user = await userRespository.updatePassword(
+    _id,
+    senha_atual,
+    nova_senha
+  );
+
+  if (user) {
+    console.log(user);
+    req.flash("senha-success", messageSuccess);
+    return res.redirect("/loja/conta-senha");
+  }
+
+  req.flash("senha-error", messageError);
+  res.redirect("/loja/conta-senha");
+});
+
 module.exports = routes;

@@ -29,14 +29,14 @@ app.use(
     saveUninitialized: true,
   })
 );
+app.use(express.static(__dirname + "../../public"));
+app.set("view engine", "ejs");
+app.set("views", "./src/views");
+
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(flash());
 app.use(routes);
-
-app.set("view engine", "ejs");
-app.set("views", "./src/views");
-app.use(express.static(__dirname + "../../public"));
 
 app.listen(PORT, () => console.log("HTTP server is running..."));

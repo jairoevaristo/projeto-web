@@ -95,6 +95,23 @@ class UserRepository {
       return userUpdate;
     }
   }
+
+  async updatePassword(id, senha_atual, nova_senha) {
+    const userExists = await User.findById(id);
+    if (!userExists) {
+      console.log("userExists", userExists);
+      return;
+    }
+    const passwordHash = await compare(senha_atual, userExists.senha);
+    if (!passwordHash) {
+      console.log("passwordHash update", passwordHash);
+      return;
+    }
+
+    const newPasswordHash = await hash(nova_senha, 8);
+    const user = await User.findByIdAndUpdate(id, { senha: newPasswordHash });
+    return user;
+  }
 }
 
 module.exports = UserRepository;
