@@ -14,11 +14,11 @@ routesAdmin.get("/signin", (req, res) => {
 
 routesAdmin.post("/signin", async (req, res) => {
   const { login, senha } = req.body;
-  let message = "Email ou senha incorretos";
+  let message = "Login ou senha incorretos";
 
-  const user = await adminRepository.login(login, senha);
+  const admin = await adminRepository.login(login, senha);
 
-  if (user) {
+  if (admin) {
     req.session.admin = admin;
     return res.redirect("/admin/loja");
   }
@@ -27,15 +27,26 @@ routesAdmin.post("/signin", async (req, res) => {
   res.redirect("admin/signin");
 });
 
-// routesAdmin.use((req, res, next) => {
-//   if (!req.session.admin) {
-//     return res.redirect("/admin/signin");
-//   }
+routesAdmin.use(async (req, res, next) => {
+  if (!req.session.admin) {
+    return res.redirect("/admin/signin");
+  }
 
-//   // fazer condição para admin com o status ativo ou inativo
+  const { _id } = req.session.admin;
+  const isUserActive = await adminRepository.findAdminById(_id);
 
-//   next();
-// });
+  if (!isUserActive) {
+    return res.redirect("/admin/signin");
+  }
+
+  if (isUserActive.status === "INACTIVE") {
+    let message = "Este usuário está inativo, tem outro";
+    req.flash("login-error", message);
+    return res.redirect("/admin/signin");
+  }
+
+  next();
+});
 
 routesAdmin.get("/loja", (req, res) => {
   return res.render("admin/loja");
@@ -48,16 +59,13 @@ routesAdmin.get("/usuarios", async (req, res) => {
 });
 
 routesAdmin.get("/add-usuario", (req, res) => {
-  return res.render("admin/add-user");
-});
-
-routesAdmin.get("/add-usuario", (req, res) => {
-  const message = req.flash("add-user");
+  const message = req.flash("add_user");
   return res.render("admin/add-user", { message });
 });
 
 routesAdmin.post("/add-usuario", async (req, res) => {
   const { nome, email, telefone, login, senha } = req.body;
+  let message = "teste";
 
   const user = await adminRepository.create({
     nome,
@@ -69,11 +77,28 @@ routesAdmin.post("/add-usuario", async (req, res) => {
 
   if (user.message) {
     message = user.message;
-    req.flash("add-user", message);
+    req.flash("add_user", message);
     return res.redirect("/admin/add-usuario");
   }
 
   return res.redirect("/admin/usuarios");
+});
+
+routesAdmin.post("/editar-usuario", async (req, res) => {
+  const { nome, email, telefone, login, senha, status, user_id } = req.body;
+
+  const user = await adminRepository.updateAdminById(user_id, {
+    nome,
+    email,
+    telefone,
+    login,
+    senha,
+    status,
+  });
+
+  if (user) {
+    return res.redirect("/admin/usuarios");
+  }
 });
 
 module.exports = routesAdmin;

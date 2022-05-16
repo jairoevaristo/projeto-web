@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="/styles/style.css">
   <title>CartHend</title>
 </head>
-<body>
-  <div id="campos-produto" class="flex jusitify-center flex-col"></div>
+<body class="relative">
+  <div id="campos-produto" class="bg-gray-600/40 z-50 flex justify-center items-center fixed w-full h-screen hidden"></div>
   <header class="flex items-center justify-between border-b-2 border-gray-100 mb-12 px-4 py-2">
     <a href="/admin/loja">
       <img src="/assets/header.png" />
@@ -78,7 +78,9 @@
                   >
                     Senha
                   </th>
-                  
+                  <td class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Status
+                  </td>
                   <th
                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
                   >
@@ -88,13 +90,14 @@
               </thead>
               <tbody>
                   <% admins.forEach(admin => { %>
-                  <tr onclick="mostrarModal('<%= admin._id%>')" class="cursor-pointer hover:translate-y-[-1px] ease-linear duration-100">
+                  <tr class="hover:translate-y-[-1px] ease-linear duration-100">
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <%= admin.nome%>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <%= admin.email%>
                     </td>
+                    
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <%= admin.telefone%>
                     </td>
@@ -106,25 +109,21 @@
                     >
                       ******
                     </td>
-                 
-
-                    <!-- <td
-                      class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                    >
-                    <div class="flex items-center justify-center">
-                      <label for="toggleB" class="flex items-center cursor-pointer">
-                        <div class="relative">
-                          <input type="checkbox" id="toggleB" class="sr-only">
-                          <div id="toggle" class="block bg-gray-600 w-14 h-7 rounded-full"></div>
-                          <div id="dot-toggle" class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition"></div>
-                        </div>
-                      </label>
-                    </div>
-                    </td> -->
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <span
+                        class="relative inline-block px-3 py-1 font-semibold <%= admin.status === 'ACTIVE' ? 'text-green-900' : 'text-red-900' %> leading-tight"
+                      >
+                        <span
+                          aria-hidden
+                          class="absolute inset-0 <%= admin.status === 'ACTIVE' ? 'bg-green-200' : 'bg-red-200' %> opacity-50 rounded-full"
+                        ></span>
+                        <span class="relative"><%= admin.status%></span>
+                      </span>
+                    </td>
                     <td
                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                   >
-                    <div class="h-7 w-7">
+                    <div onclick="mostrarModal('<%= admin._id%>')"  class="cursor-pointer h-7 w-7">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                       </svg>
@@ -143,16 +142,201 @@
   <script>
     const camposProduto = document.querySelector('#campos-produto');
     const admins = document.querySelector('#admins');
+    let isActive = false;
+
+    let buttonSubmit = document.createElement('button') 
+    let buttonCancel = document.createElement('button')
+    let wrapperButton = document.createElement('div');
+
+    let content = document.createElement('form');
+
+    let labelNome = document.createElement('label');
+    let inputNome = document.createElement('input');
+
+    let labelEmail = document.createElement('label');
+    let inputEmail = document.createElement('input');
+
+    let labelTelefone = document.createElement('label');
+    let inputTelefone = document.createElement('input');
+
+    let labelLogin = document.createElement('label');
+    let inputLogin = document.createElement('input');
+
+    let labelSenha = document.createElement('label');
+    let inputSenha = document.createElement('input');
+
+    let labelStatus = document.createElement('label');
+    let inputStatus = document.createElement('div');
+    let inputStatusData = document.createElement('input');
+
+    let wrapperStatus = document.createElement('div');
+    let labelContentStatus = document.createElement('label');
+    let wrapperStatusContentDot = document.createElement('div');
+    let wrapperStatusContentColor = document.createElement('div');
+    let wrapperStatusContent = document.createElement('div');
+
+    let idUser = document.createElement('input');
+
 
     const adminToObject = JSON.parse(admins.value);
-    let isHidden = false;
 
      function mostrarModal(id) {
         camposProduto.innerHTML = '';
-        isHidden = !isHidden;
+        content.innerHTML = '';
+
+        camposProduto.classList.remove('hidden');
         const data = adminToObject.find(item => item._id === id);
-        console.log(data);
+        isActive = data.status === 'ACTIVE' ? true : false;
+
+        montarCamposModal(data);
     }
+
+    function montarCamposModal(data) {
+      wrapperStatus.innerHTML = ''
+      labelStatus.innerHTML = ''
+      content.className = 'w-[40vw] h-[60vh] flex flex-col px-4 py-8 bg-white rounded-md';
+    
+      content.method = 'POST';
+      content.action = '/admin/editar-usuario';
+
+      labelNome.className = 'text-sky-800 mb-2 w-full'
+      labelNome.textContent = 'Nome';
+      
+      inputNome.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputNome.value = data.nome
+      inputNome.name = 'nome'
+      
+      labelNome.append(inputNome)
+      content.appendChild(labelNome);
+
+      labelEmail.className = 'text-sky-800 mb-2 w-full'
+      labelEmail.textContent = 'Email';
+      inputEmail.name = 'email'
+      
+      inputEmail.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputEmail.value = data.email
+
+      labelEmail.append(inputEmail);
+      content.appendChild(labelEmail);
+
+      let wrapper = document.createElement('div');
+
+      wrapper.className = 'grid grid-cols-2 gap-3'
+
+      labelTelefone.className = 'text-sky-800 mb-2 w-full'
+      labelTelefone.textContent = 'Telefone';
+      inputTelefone.name = 'telefone'
+      
+      inputTelefone.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputTelefone.value = data.telefone
+
+      labelTelefone.append(inputTelefone);
+      wrapper.appendChild(labelTelefone);
+
+      labelLogin.className = 'text-sky-800 mb-2 w-full'
+      labelLogin.textContent = 'Login';
+      inputLogin.name = 'login'
+      
+      inputLogin.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputLogin.value = data.login
+
+      labelLogin.append(inputLogin);
+      wrapper.appendChild(labelLogin);
+      content.appendChild(wrapper);
+
+      wrapperStatus.className = 'flex items-center justify-start w-full mb-4';
+
+      labelContentStatus.textContent = 'Ativar/Desativar';
+      labelContentStatus.className = 'text-sky-800 mb-2 w-full';
+
+      labelStatus.className = 'flex items-center cursor-pointer';
+      wrapperStatusContent.className = 'relative';
+      inputStatus.type = 'checkbox';
+      inputStatus.className = 'sr-only';
+      inputStatusData.name = 'status'
+      inputStatusData.type = 'hidden'
+      
+      idUser.name = 'user_id';
+      idUser.type = 'hidden';
+      idUser.value = data._id
+
+      wrapperStatusContentColor.id = 'toggle';
+      wrapperStatusContentDot.id = 'dot-toggle';
+
+      if (data.status === 'ACTIVE') {
+        inputStatusData.value = 'ACTIVE'
+        wrapperStatusContentColor.className = "block bg-green-600 w-14 h-7 rounded-full";
+        wrapperStatusContentDot.className = 'dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition'
+      }
+
+      else {
+        inputStatusData.value = 'INACTIVE'
+        wrapperStatusContentColor.className = "block bg-gray-600 w-14 h-7 rounded-full";
+        wrapperStatusContentDot.className = 'dot absolute right-1 top-1 bg-white w-5 h-5 rounded-full transition'
+      }
+
+      wrapperStatusContent.appendChild(inputStatus);
+      wrapperStatusContent.appendChild(wrapperStatusContentColor);
+      wrapperStatusContent.appendChild(wrapperStatusContentDot);
+
+      labelStatus.append(wrapperStatusContent);
+      labelContentStatus.append(labelStatus);
+      wrapperStatus.append(labelContentStatus);
+      content.appendChild(wrapperStatus);
+
+      labelSenha.className = 'text-sky-800 mb-2 w-full'
+      labelSenha.textContent = 'Nova senha';
+      inputSenha.name = 'senha';
+      
+      inputSenha.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputSenha.value = "";
+
+      labelSenha.append(inputSenha);
+      content.appendChild(labelSenha);
+
+      wrapperButton.className = 'flex w-full justify-end items-center';
+      buttonCancel.className = "mr-3 bg-white p-2 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400"
+      buttonSubmit.className = "bg-orange-600 p-2 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400"
+
+      buttonCancel.type = 'button'
+
+      buttonCancel.textContent = 'Fechar'
+      buttonSubmit.textContent = 'Editar'
+
+      wrapperButton.appendChild(buttonCancel)
+      wrapperButton.appendChild(buttonSubmit)
+
+      content.append(idUser)
+      content.append(inputStatusData)
+      content.append(wrapperButton)
+
+      camposProduto.appendChild(content);
+    }
+
+    buttonCancel.addEventListener('click', (e) => {
+      camposProduto.classList.add('hidden')
+    });
+
+    wrapperStatus.addEventListener('click', () => {
+     if (isActive) {
+        isActive = !isActive
+        wrapperStatusContentDot.classList.remove('left-1');
+        wrapperStatusContentDot.classList.add('right-1')
+        inputStatusData.value = 'INACTIVE'
+
+        wrapperStatusContentColor.classList.remove('bg-green-600');
+        wrapperStatusContentColor.classList.add('bg-gray-600')
+     } else {
+        isActive = !isActive
+        wrapperStatusContentDot.classList.remove('right-1')
+        wrapperStatusContentDot.classList.add('left-1');
+        inputStatusData.value = 'ACTIVE'
+
+        wrapperStatusContentColor.classList.remove('bg-gray-600');
+        wrapperStatusContentColor.classList.add('bg-green-600')
+     }
+    })
+
   </script>
 </body>
 </html>

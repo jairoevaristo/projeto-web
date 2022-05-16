@@ -16,7 +16,7 @@ const seedData = [
     email: "jairo@gmail.com",
     telefone: "7895748544",
     login: "admin.jairo",
-    senha: "teste",
+    senha: "$2a$08$NbmFrrChaAvAgz.Wo4xnweB7ZFGhpY1ivt.B7qVNIjYg5s3.DE0aO",
     status: "ACTIVE",
   },
 ];

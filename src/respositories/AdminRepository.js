@@ -1,18 +1,15 @@
 const Admin = require("../entities/Admin");
 const { hash, compare } = require("bcryptjs");
-const { format, addDays } = require("date-fns");
 
 class AdminRepository {
   async create({ nome, email, telefone, status, senha, login }) {
     const passwordHash = await hash(senha, 8);
-    const adminExists = await Admin.findOne({ email });
     const adminExistsLogin = await Admin.findOne({ login });
 
-    if (adminExists) {
-      return { message: "E-mail já cadastrado" };
-    }
+    console.log("adminExistsLogin", adminExistsLogin);
 
     if (adminExistsLogin) {
+      console.log("opa", adminExistsLogin);
       return { message: "Login já cadastrado" };
     }
 
@@ -29,7 +26,11 @@ class AdminRepository {
   }
 
   async login(login, senha) {
+    console.log({ login, senha });
+
     const adminExists = await Admin.findOne({ login });
+    console.log({ adminExists });
+
     if (!adminExists) {
       console.log("adminExists", adminExists);
       return;
@@ -43,6 +44,34 @@ class AdminRepository {
     }
 
     return adminExists;
+  }
+
+  async updateAdminById(id, { nome, email, telefone, login, senha, status }) {
+    if (senha) {
+      const userUpdate = await Admin.findByIdAndUpdate(id, {
+        nome,
+        email,
+        login,
+        telefone,
+        status,
+        senha,
+      });
+      return userUpdate;
+    } else {
+      const userUpdate = await Admin.findByIdAndUpdate(id, {
+        nome,
+        email,
+        login,
+        telefone,
+        status,
+      });
+      return userUpdate;
+    }
+  }
+
+  async findAdminById(id) {
+    const admin = await Admin.findById(id);
+    return admin;
   }
 
   async findAll() {
