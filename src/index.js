@@ -9,6 +9,7 @@ const cookieSession = require("cookie-session");
 const session = require("express-session");
 
 const routes = require("./routes");
+const routesAdmin = require("./routes.admin");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -37,6 +38,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(flash());
+app.use("/admin", routesAdmin);
 app.use(routes);
 
 app.listen(PORT, () => console.log("HTTP server is running..."));

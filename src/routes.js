@@ -134,7 +134,7 @@ routes.post("/loja/conta-senha", async (req, res) => {
   const { _id } = req.session.user;
 
   let messageSuccess = "Senha alterado com sucesso";
-  let messageError = "Erro ao alterar a senha, tem novamente";
+  let messageError = "Erro ao alterar a senha, tente novamente";
 
   const user = await userRespository.updatePassword(
     _id,
