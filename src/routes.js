@@ -3,14 +3,18 @@ const multer = require("multer");
 
 const UserRespository = require("./respositories/UserRepository");
 const multerConfig = require("./libs/multer");
+const CarRepository = require("./respositories/CarRepository");
 
 const userRespository = new UserRespository();
+const carRepository = new CarRepository();
+
 const routes = Router();
 
 // Rotas de renderização das telas
 
-routes.get("/", (req, res) => {
-  return res.render("loja-view");
+routes.get("/", async (req, res) => {
+  const cars = await carRepository.findAll();
+  return res.render("loja-view", { cars });
 });
 
 routes.get("/signin", (req, res) => {
@@ -70,8 +74,19 @@ routes.use((req, res, next) => {
 routes.get("/loja", async (req, res) => {
   const { _id } = req.session.user;
   const { avatar, nome } = await userRespository.findUserById(_id);
+  const cars = await carRepository.findAllCarDisponiveis();
 
-  return res.render("auth/loja", { avatar, nome });
+  return res.render("auth/loja", { avatar, nome, cars });
+});
+
+routes.get("/loja/alugar/:id", async (req, res) => {
+  const { id } = req.params;
+  const { _id } = req.session.user;
+
+  const { avatar, nome } = await userRespository.findUserById(_id);
+  const car = await carRepository.findCarById(id);
+
+  return res.render("auth/aluguar-car", { avatar, nome, car });
 });
 
 routes.get("/loja/conta", async (req, res) => {
@@ -90,8 +105,6 @@ routes.get("/loja/conta-editar", async (req, res) => {
   const user = await userRespository.findUserById(_id);
   return res.render("auth/conta-edit", { user, avatar, nome });
 });
-
-module.exports = routes;
 
 routes.post(
   "/loja/conta-editar",
@@ -143,13 +156,16 @@ routes.post("/loja/conta-senha", async (req, res) => {
   );
 
   if (user) {
-    console.log(user);
     req.flash("senha-success", messageSuccess);
     return res.redirect("/loja/conta-senha");
   }
 
   req.flash("senha-error", messageError);
   res.redirect("/loja/conta-senha");
+});
+
+routes.post("/loja/alugar", (req, res) => {
+  console.log({ id: req.session.user._id, data: req.body });
 });
 
 module.exports = routes;

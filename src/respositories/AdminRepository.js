@@ -29,7 +29,6 @@ class AdminRepository {
     console.log({ login, senha });
 
     const adminExists = await Admin.findOne({ login });
-    console.log({ adminExists });
 
     if (!adminExists) {
       console.log("adminExists", adminExists);
@@ -47,14 +46,22 @@ class AdminRepository {
   }
 
   async updateAdminById(id, { nome, email, telefone, login, senha, status }) {
+    const adminExists = await Admin.findOne({ login });
+
+    if (!adminExists) {
+      console.log("Admin não encontrado");
+      return;
+    }
+
     if (senha) {
+      const passwordHash = await hash(senha, 8);
       const userUpdate = await Admin.findByIdAndUpdate(id, {
         nome,
         email,
         login,
         telefone,
         status,
-        senha,
+        senha: passwordHash,
       });
       return userUpdate;
     } else {

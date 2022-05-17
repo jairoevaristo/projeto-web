@@ -2,10 +2,12 @@ const { Router } = require("express");
 const multer = require("multer");
 
 const AdminRepository = require("./respositories/AdminRepository");
-const multerConfig = require("./libs/multer.admin");
+const CarRepository = require("./respositories/CarRepository");
+const multerConfigAdmin = require("./libs/multer.admin");
 
 const routesAdmin = Router();
 const adminRepository = new AdminRepository();
+const carRepository = new CarRepository();
 
 routesAdmin.get("/signin", (req, res) => {
   const message = req.flash("login-error");
@@ -100,5 +102,36 @@ routesAdmin.post("/editar-usuario", async (req, res) => {
     return res.redirect("/admin/usuarios");
   }
 });
+
+routesAdmin.get("/loja/add-carro", (req, res) => {
+  const message = req.flash("add_car");
+  return res.render("admin/add-car", { message });
+});
+
+routesAdmin.post(
+  "/loja/add-carro",
+  multer(multerConfigAdmin).single("avatar"),
+  async (req, res) => {
+    const { nome, marca, preco_diaria, valor_carro, cor } = req.body;
+    const avatar = req.file;
+
+    const foto = `${process.env.DOMAIN_APP}/cars/${avatar.filename.replace(
+      " ",
+      "-"
+    )}`;
+
+    const car = await carRepository.create({
+      cor,
+      foto,
+      marca,
+      nome,
+      preco_diaria,
+      valor: valor_carro,
+    });
+
+    console.log(car);
+    return res.json(car);
+  }
+);
 
 module.exports = routesAdmin;

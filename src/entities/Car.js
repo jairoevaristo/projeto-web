@@ -3,8 +3,14 @@ const mongoose = require("mongoose");
 const carSchema = new mongoose.Schema({
   nome: String,
   marca: String,
-  preco_diario: Number,
-  valor: Number,
+  preco_diaria: String,
+  valor: String,
+  status: {
+    type: String,
+    enum: ["DISPONÍVEL", "INDISPONÍVEL"],
+    default: "DISPONÍVEL",
+  },
+  data_aluguel: Date,
   cor: String,
   foto: String,
   created_at: {

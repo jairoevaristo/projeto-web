@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>CartHend</title>
+</head>
+<body>
+  <header class="flex items-center justify-between border-b-2 border-gray-100 mb-12 px-4 py-2">
+    <a href="/admin/loja">
+      <img src="/assets/header.png" />
+    </a>
+
+    <ul class="flex item-center justify-center">
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/signin" class="p-4 text-sky-800 text-lg">
+          Alugueis
+        </a>
+      </li>
+      <li class="flex items-center">
+        <div class="h-8 w-[2px] bg-sky-800 mx-2"></div>
+      </li>
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/loja/conta" class="p-4 text-sky-800 text-lg text-center">
+          Usuários
+        </a>
+      </li>
+    </ul>
+  </header>
+  <div class="container mx-auto max-w-3xl">
+    <div class="flex flex-col mt-[60px]">
+      <h1 class="text-orange-600 text-7xl text-center">Cadastrar carro</h1>
+
+      <form class="flex flex-col mt-10">
+        <span class="text-red-400 mb-4 font-light text-2xl"><%=message%></span>
+        
+        <label class="text-sky-800 mb-1">Nome</label>
+        <input id="nome" required autofocus type="text" placeholder="Seu nome completo" name="nome" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+        
+        <label class="text-sky-800 mb-1">Marca</label>
+        <input id="marca" required type="text" placeholder="Marca do carro" name="marca" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="text-sky-800 mb-1">Preço da diária</label>
+            <input required type="text" id="preco_diaria" placeholder="Preço da diária" name="preco_diaria" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+          </div>
+          
+          <div class="flex flex-col justify-center">
+            <label class="text-sky-800">Valor</label>
+            <input  required type="text" id="valor_carro" placeholder="Valor do carro" name="valor_total" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <label class="text-sky-800 mb-1">Cor</label>
+            <input required type="color" id="cor" name="cor" class="w-20 border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+          </div>
+        </div>
+
+        <div class="flex flex-col w-full drop-shadow-lg mb-4 mt-4">
+          <img id="image" class="w-40 h-40 rounded-full" src="data:image/png;base64,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" alt="">
+          <input id="avatar" name="avatar" value="Selecionar imagem" type="file" class="text-center w-60 mt-4 mb-4 bg-orange-600 p-2 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400" />
+          <span class="text-lg text-red-400 mb-4 hidden" id="span-message"></span>
+        </div>
+        </div>
+          <div class="flex items-center justify-end w-full p-4">
+            <a href="/admin/loja" class="mr-3 bg-white p-2 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400">
+              Cancelar
+            </a>
+
+            <button id="button-submit" class="bg-orange-600 p-2 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400">
+              Cadastrar
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+  <script src="/js/admin-add-car.js"></script>
+</body>
+</html>
