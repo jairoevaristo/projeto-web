@@ -24,7 +24,6 @@ class AdminRepository {
 
   async login(login, senha) {
     const adminExists = await Admin.findOne({ login });
-
     if (!adminExists) {
       console.log("adminExists", adminExists);
       return;
