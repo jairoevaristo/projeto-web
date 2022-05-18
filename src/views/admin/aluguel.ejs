@@ -163,6 +163,7 @@
 
 
     let inputStatusData = document.createElement('input');
+    let inputIdCarData = document.createElement('input');
 
     let idUser = document.createElement('input');
 
@@ -203,6 +204,14 @@
 
       inputStatusData.name = 'status'
       inputStatusData.type = 'hidden'
+
+      inputIdCarData.name = 'idCar'
+      inputIdCarData.type = 'hidden'
+      inputIdCarData.value = data.id_car;
+      content.append(inputIdCarData)
+
+
+      console.log(inputIdCarData.value);
       
       labelNome.append(inputNome)
       content.appendChild(labelNome);

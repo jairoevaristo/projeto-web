@@ -53,8 +53,9 @@ routesAdmin.use(async (req, res, next) => {
 });
 
 routesAdmin.get("/loja", async (req, res) => {
+  const message = req.flash("remove-car");
   const cars = await carRepository.findAll();
-  return res.render("admin/loja", { cars });
+  return res.render("admin/loja", { cars, message });
 });
 
 routesAdmin.get("/usuarios", async (req, res) => {
@@ -174,17 +175,17 @@ routesAdmin.get("/usuarios", async (req, res) => {
 
 routesAdmin.get("/alugueis", async (req, res) => {
   const alugueis = await aluguelRepository.findAll();
-  console.log(alugueis);
 
   return res.render("admin/aluguel", { alugueis });
 });
 
 routesAdmin.post("/aluguel", async (req, res) => {
-  const { status, id } = req.body;
+  const { status, id, idCar } = req.body;
 
-  console.log();
-
-  const aluguel = await aluguelRepository.updateStatus(id, { status });
+  const aluguel = await aluguelRepository.updateStatus(id, {
+    status,
+    id_car: idCar,
+  });
 
   if (aluguel) {
     return res.redirect("/admin/alugueis");
@@ -193,7 +194,15 @@ routesAdmin.post("/aluguel", async (req, res) => {
 
 routesAdmin.get("/loja/remove-carro/:id", async (req, res) => {
   const { id } = req.params;
-  await carRepository.removeCar(id);
+  const result = await carRepository.removeCar(id);
+
+  let message = "";
+
+  if (result.message) {
+    message = result.message;
+    req.flash("remove-car", message);
+    return res.redirect("/admin/loja");
+  }
 
   return res.redirect("/admin/loja");
 });

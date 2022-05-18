@@ -79,6 +79,8 @@ routes.get("/loja", async (req, res) => {
   const { avatar, nome } = await userRespository.findUserById(_id);
   const cars = await carRepository.findAllCarDisponiveis();
 
+  console.log({ cars });
+
   return res.render("auth/loja", { avatar, nome, cars });
 });
 
@@ -88,8 +90,16 @@ routes.get("/loja/alugar/:id", async (req, res) => {
 
   const { avatar, nome } = await userRespository.findUserById(_id);
   const car = await carRepository.findCarById(id);
+  const aluguelCar = await aluguelRepository.findAllByIdCar(id);
 
-  return res.render("auth/aluguar-car", { avatar, nome, car });
+  const filterStatus = aluguelCar.filter(
+    (item) => item.status === "Confirmado"
+  );
+
+  console.log({ aluguelCar });
+  console.log({ filterStatus });
+
+  return res.render("auth/aluguar-car", { avatar, nome, car, filterStatus });
 });
 
 routes.get("/loja/conta", async (req, res) => {

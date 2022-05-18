@@ -80,19 +80,23 @@
         </div>
         <div class="border-b-2 p-2 w-full"></div>
         
-        <label class="text-sky-800 mb-2 mt-4">Reservas programadas</label>
-          <div class="flex items-center mb-3">
-            <span
-              class="relative inline-block px-3 p-2 font-semibold leading-tight text-sky-900"
-            >
+        <label class="text-sky-800 mb-2 mt-4">Reservas Confirmadas</label>
+        <div class=" flex items-center">
+          <% filterStatus.slice(0, 3).forEach(item => { %>
+            <div class="flex items-center mb-3 mr-2">
               <span
-                aria-hidden
-                class="absolute inset-0 opacity-50 rounded bg-sky-800"
-              ></span>
-              <span class="relative">Próxima reserva - 27/09</span>
-            </span>
-          </div>
+                class="relative inline-block px-3 p-2 font-semibold leading-tight text-sky-900"
+              >
+                <span
+                  aria-hidden
+                  class="absolute inset-0 opacity-50 rounded bg-sky-800"
+                ></span>
+                <span class="relative"><%=item.data_inicio%></span>
+              </span>
+            </div>
 
+          <% }) %>
+        </div>
           <div class="grid grid-cols-3 gap-3 mt-4">
             <div>
               <label class="text-sky-800 mb-1">Início do aluguel</label>
@@ -128,12 +132,12 @@
           </div>
 
           <div class="flex items-center justify-end w-full p-4">
-            <a href="/" class="mr-3 bg-white p-2 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400">
+            <a href="/loja" class="mr-3 bg-white p-2 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400">
               Cancelar
             </a>
 
             <button id="button-submit" type="submit" class="bg-orange-600 p-2 rounded hover:bg-orange-700 text-white transition-colors focus:ring-2 focus:ring-orange-500 border focus:border-orange-400">
-              Alugar
+              Confirmar reserva
             </button>
           </div>
       </form>
