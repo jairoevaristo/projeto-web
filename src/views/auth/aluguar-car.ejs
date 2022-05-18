@@ -49,23 +49,23 @@
       <form class="flex flex-col mt-10" action="/loja/alugar" method="POST">
         
         <label class="text-sky-800 mb-1">Nome</label>
-        <input id="nome" required autofocus type="text" value=<%= car.nome%> name="nome" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+        <input id="nome" readonly type="text" value=<%= car.nome%> name="nome" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
         
         <input type="hidden" name="id_car" value=<%= car._id%> />
         
         <label class="text-sky-800 mb-1">Marca</label>
-        <input id="email" required type="text" value=<%= car.marca%> name="marca" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+        <input id="email" readonly type="text" value=<%= car.marca%> name="marca" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
 
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="text-sky-800 mb-1">Preço da diária</label>
-            <input required type="text" name="preco_diaria" value=<%= car.preco_diaria%> class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+            <input readonly type="text" name="preco_diaria" value=<%= car.preco_diaria%> class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
             <input id="preco_diaria" type="hidden" value=<%= JSON.stringify(car.preco_diaria)%> />
           </div>
           
           <div>
             <label class="text-sky-800 mb-1">Valor</label>
-            <input required type="text" value=<%= car.valor%> name="valor" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+            <input readonly type="text" value=<%= car.valor%> name="valor" class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
           </div>
           
           <div class="flex flex-col justify-center mt-[-7px]">

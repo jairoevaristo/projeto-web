@@ -39,7 +39,7 @@ class CarRepository {
             ? format(addDays(item.data_aluguel, 1), "dd/MM/yyyy")
             : "",
         status:
-          Date.parse(item.data_aluguel) >= Date.now()
+          Date.parse(item.data_aluguel) < Date.now()
             ? "INDISPONÍVEL"
             : "DISPONÍVEL",
       };
