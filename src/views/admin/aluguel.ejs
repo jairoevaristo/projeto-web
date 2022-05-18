@@ -353,9 +353,14 @@
 
       wrapperButton.className = 'flex items-center p-4 w-full flex items-center justify-end'
 
-      wrapperButton.appendChild(buttonCancel)
-      wrapperButton.appendChild(buttonConfirmar)
-      wrapperButton.appendChild(buttonRejeitar)
+      if (data.status === 'Aguardando Confirmação') {
+        wrapperButton.appendChild(buttonConfirmar)
+        wrapperButton.appendChild(buttonRejeitar);
+        wrapperButton.appendChild(buttonCancel);
+      } else {
+        wrapperButton.innerHTML = ''
+        wrapperButton.appendChild(buttonCancel);
+      }
       content.append(inputStatusData)
 
       content.appendChild(wrapperButton)
