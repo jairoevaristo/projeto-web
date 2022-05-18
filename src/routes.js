@@ -1,12 +1,15 @@
 const { Router } = require("express");
 const multer = require("multer");
 
-const UserRespository = require("./respositories/UserRepository");
 const multerConfig = require("./libs/multer");
+
+const UserRespository = require("./respositories/UserRepository");
 const CarRepository = require("./respositories/CarRepository");
+const AluguelRepository = require("./respositories/AluguelRepository");
 
 const userRespository = new UserRespository();
 const carRepository = new CarRepository();
+const aluguelRepository = new AluguelRepository();
 
 const routes = Router();
 
@@ -164,8 +167,36 @@ routes.post("/loja/conta-senha", async (req, res) => {
   res.redirect("/loja/conta-senha");
 });
 
-routes.post("/loja/alugar", (req, res) => {
-  console.log({ id: req.session.user._id, data: req.body });
+routes.post("/loja/alugar", async (req, res) => {
+  const { inicio_aluguel, fim_aluguel, valor_final, pagamento, id_car } =
+    req.body;
+  const { _id } = req.session.user;
+
+  let [removeDecimal] = valor_final.split(",");
+  let [_, value] = removeDecimal.split("R$ ");
+
+  const aluguel = await aluguelRepository.create({
+    car: id_car,
+    data_fim: fim_aluguel,
+    data_inicio: inicio_aluguel,
+    pagamento,
+    user: _id,
+    valor_final: Number(value),
+  });
+
+  if (aluguel) {
+    // console.log(aluguel);
+    return res.redirect("/loja");
+  }
+});
+
+routes.get("/loja/aluguel", async (req, res) => {
+  const { _id } = req.session.user;
+  const { avatar, nome } = await userRespository.findUserById(_id);
+
+  const alugueis = await aluguelRepository.findAllById(_id);
+
+  res.render("auth/meus-alugueis", { avatar, nome, alugueis });
 });
 
 module.exports = routes;

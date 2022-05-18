@@ -28,6 +28,33 @@ class CarRepository {
     const cars = await Car.find().where("status").equals("DISPONÍVEL");
     return cars;
   }
+
+  async updateCarById(id, { nome, marca, preco_diaria, valor, cor, avatar }) {
+    if (avatar) {
+      const saveAvatar = `${
+        process.env.DOMAIN_APP
+      }/cars/${avatar.filename.replace(" ", "-")}`;
+
+      const carUpdate = await Car.findByIdAndUpdate(id, {
+        nome,
+        marca,
+        preco_diaria,
+        valor,
+        cor,
+        foto: saveAvatar,
+      });
+      return carUpdate;
+    } else {
+      const carUpdate = await Car.findByIdAndUpdate(id, {
+        nome,
+        marca,
+        preco_diaria,
+        valor,
+        cor,
+      });
+      return carUpdate;
+    }
+  }
 }
 
 module.exports = CarRepository;

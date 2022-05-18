@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>CartHend</title>
+</head>
+<body>
+  <header class="flex items-center justify-between border-b-2 border-gray-100 mb-12 px-4 py-2">
+    <a href="/loja">
+      <img src="/assets/header.png" />
+    </a>
+
+    <ul class="flex item-center justify-center">
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/loja/aluguel" class="p-4 text-sky-800 text-lg">
+          Meus alugueis
+        </a>
+      </li>
+      <li class="flex items-center">
+        <div class="h-8 w-[2px] bg-sky-800 mx-2"></div>
+      </li>
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/admin/loja/conta" class="p-4 text-sky-800 text-lg">
+          Minha conta
+        </a>
+      </li>
+
+      <li class="ml-8 flex items-center">
+        <div class="flex items-center">
+          <img src=<%=avatar %> class="rounded-full w-10 h-10 mr-3" />
+          <span class="text-sky-800 text-lg">
+            <%= nome%>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </header>
+  <div class="container mx-auto max-w-6xl">
+    <div class="flex flex-col mt-[60px] mb-4">
+      <h1 class="text-orange-600 text-7xl text-center mb-3">Meus Alugueis</h1>
+      <% alugueis.forEach(item => { %>
+        <div class="mt-4 w-full p-4 mb-4 flex items-center justify-center">
+            <div class="grid grid-cols-4 gap-3 w-full h-30 shadow-md border-gray-100 p-4">
+              <div class="flex flex-col">
+                <label class="text-sky-800 mb-1">Nome</label>
+                <span class="text-black"><%= item.nome%></span>
+              </div>
+  
+              <div class="flex flex-col">
+                <label class="text-sky-800 mb-1">Quantidade de diárias</label>
+                <span class="text-black"><%= item.quantidade_diarias%></span>
+              </div>
+  
+              <div class="flex flex-col">
+                <label class="text-sky-800 mb-1">Valor total do aluguel</label>
+                <span class="text-black"><%= item.valor_total%></span>
+              </div>
+  
+              <div class="flex flex items-center">
+                <label class="text-sky-800 mb-1">Cor</label>
+                <div class="w-6 h-6 ml-3 rounded-full" style="background-color: <%= item.cor%>;"></div>
+              </div>
+  
+              <div class="flex flex-col">
+                <label class="text-sky-800 mb-1">Marca</label>
+                <span class="text-black"><%= item.marca%></span>
+              </div>
+  
+              <div class="flex flex-col">
+                <label class="text-sky-800 mb-1">Data de início</label>
+                <span class="text-black"><%= item.data_inicio%></span>
+              </div>
+  
+              <div class="flex flex-col col-span-2 text-right">
+                <label class="text-sky-800 mb-1">Status</label>
+                <span class="text-black <%= item.status === 'Confirmado' ? 'text-green-500' : 'text-red-800'%> <%= item.status === 'Aguardando Confirmação' ? 'text-yellow-500' : 'text-black' %> "><%= item.status%></span>
+              </div>
+            </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+  </div>
+</body>
+</html>

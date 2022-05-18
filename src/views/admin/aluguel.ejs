@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>CartHend</title>
+</head>
+<body class="relative">
+  <div id="campos-produto" class="bg-gray-600/40 z-50 flex justify-center items-center fixed w-full h-screen hidden"></div>
+  <header class="flex items-center justify-between border-b-2 border-gray-100 mb-12 px-4 py-2">
+    <a href="/admin/loja">
+      <img src="/assets/header.png" />
+    </a>
+
+    <ul class="flex item-center justify-center">
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/admin/alugueis" class="p-4 text-sky-800 text-lg">
+          Alugueis
+        </a>
+      </li>
+      <li class="flex items-center">
+        <div class="h-8 w-[2px] bg-sky-800 mx-2"></div>
+      </li>
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/admin/usuarios" class="p-4 text-sky-800 text-lg">
+          Usuários
+        </a>
+      </li>
+    </ul>
+  </header>
+  <div class="container mx-auto max-w-8xl">
+    <div class="flex w-full flex-col mt-[60px]">
+      <h1 class="text-orange-600 text-7xl text-center">Alugueis</h1>
+    </div>
+    <div class="w-full px-4 sm:px-8 w-full">
+      <div class="py-8">
+        <div class="-mx-4 sm:-mx-8 py-4 overflow-x-auto">
+          <div
+            class="inline-block min-w-full shadow-md rounded-lg overflow-hidden"
+          >
+            <table class="min-w-full leading-normal">
+              <thead>
+                <input id="aluguel" type="hidden" value="<%= JSON.stringify(alugueis)%>" />
+                <tr>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  >
+                    ID
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  >
+                    Nome do Carro
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  >
+                    Data de início
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  >
+                    Data de Término
+                  </th>
+                  <th
+                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  >
+                    Nome do cliente
+                  </th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <% alugueis.forEach(aluguel => { %>
+                  <tr onclick="mostrarModal('<%= aluguel.id%>')" class="hover:translate-y-[-1px] ease-linear duration-100 cursor-pointer">
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <%= aluguel.id%>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <%= aluguel.nome%>
+                    </td>
+                    
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <%= aluguel.data_inicio%>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <%= aluguel.data_fim%>
+                    </td>
+                    <td
+                      class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                    >
+                    <%= aluguel.nome_cliente%>
+                    </td>
+                    
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script>
+    const camposProduto = document.querySelector('#campos-produto');
+    const aluguel = document.querySelector('#aluguel');
+
+   let aluguelToObject = JSON.parse(aluguel.value);
+
+    let buttonConfirmar = document.createElement('button') 
+    let buttonRejeitar = document.createElement('button')
+    let buttonCancel = document.createElement('button')
+
+    let wrapperButton = document.createElement('div');
+
+    let content = document.createElement('form');
+
+    let labelId = document.createElement('label');
+    let inputId = document.createElement('input');
+
+    let labelNome = document.createElement('label');
+    let inputNome = document.createElement('input');
+
+    let labelMarca = document.createElement('label');
+    let inputMarca = document.createElement('input');
+
+    let divGridCar = document.createElement('div');
+    let labelPrecoDiaria = document.createElement('label');
+    let inputPrecoDiaria = document.createElement('input');
+
+    let labelValor = document.createElement('label');
+    let inputValor = document.createElement('input');
+
+    let labelCor = document.createElement('label');
+    let divCor = document.createElement('div');
+    let wrapperCor = document.createElement('div');
+
+    let divGridAluguel = document.createElement('div');
+    let labelIncioAluguel = document.createElement('label');
+    let inputIncioAluguel = document.createElement('input');
+
+    let labelFimAluguel = document.createElement('label');
+    let inputFimAluguel = document.createElement('input');
+
+    let labelValorFinal = document.createElement('label');
+    let inputValorFinal = document.createElement('input');
+
+    let labelFoto = document.createElement('label');
+    let fotoCar = document.createElement('img');
+
+    let labelNomeCliente = document.createElement('label');
+    let inputNomeCliente = document.createElement('input');
+
+    let labelStatus = document.createElement('label');
+    let textStatus = document.createElement('span');
+
+
+    let inputStatusData = document.createElement('input');
+
+    let idUser = document.createElement('input');
+
+     function mostrarModal(id) {
+      camposProduto.innerHTML = '';
+        content.innerHTML = '';
+
+        camposProduto.classList.remove('hidden');
+        const data = aluguelToObject.find(item => item.id === id);
+
+        montarCamposModal(data);
+    }
+
+    function montarCamposModal(data) {
+      content.className = 'w-[40vw] h-[96vh] flex flex-col px-4 py-8 bg-white rounded-md';
+    
+      content.method = 'POST';
+      content.action = '/admin/aluguel';
+
+      labelId.className = 'text-sky-800 mb-2 w-full'
+      labelId.textContent = 'ID';
+      
+      inputId.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputId.value = data.id
+      inputId.readOnly = true;
+      inputId.name = 'id'
+      
+      labelId.append(inputId)
+      content.appendChild(labelId);
+
+      labelNome.className = 'text-sky-800 mb-2 w-full'
+      labelNome.textContent = 'Nome';
+      
+      inputNome.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputNome.value = data.nome
+      inputNome.readOnly = true;
+      inputNome.name = 'Nome'
+
+      inputStatusData.name = 'status'
+      inputStatusData.type = 'hidden'
+      
+      labelNome.append(inputNome)
+      content.appendChild(labelNome);
+
+      labelMarca.className = 'text-sky-800 mb-2 w-full'
+      labelMarca.textContent = 'Marca';
+      
+      inputMarca.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputMarca.value = data.marca
+      inputMarca.readOnly = true;
+      inputMarca.name = 'marca'
+      
+      labelMarca.append(inputMarca)
+      content.appendChild(labelMarca);
+
+      camposProduto.appendChild(content);
+
+      divGridCar.className = 'grid grid-cols-3 gap-3';
+
+      labelPrecoDiaria.className = 'text-sky-800 mb-2 w-full'
+      labelPrecoDiaria.textContent = 'Preço da Diária';
+      
+      inputPrecoDiaria.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputPrecoDiaria.value = `R$ ${data.preco_diaria},00`
+      inputPrecoDiaria.readOnly = true;
+      inputPrecoDiaria.name = 'preco_diaria'
+      
+      labelPrecoDiaria.append(inputPrecoDiaria)
+      divGridCar.appendChild(labelPrecoDiaria)
+
+      labelValor.className = 'text-sky-800 mb-2 w-full'
+      labelValor.textContent = 'Valor';
+      
+      inputValor.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputValor.value = data.valor
+      inputValor.readOnly = true;
+      inputValor.name = 'preco_diaria'
+      
+      labelValor.append(inputValor)
+      divGridCar.appendChild(labelValor)
+
+      labelCor.className = 'text-sky-800 mb-2 w-full'
+      labelCor.textContent = 'Cor';
+      
+      divCor.className = 'h-8 w-8 rounded-full mt-2';
+      divCor.style.backgroundColor = `${data.cor}`
+      wrapperCor.className = 'flex flex-col'
+      
+      labelCor.append(divCor)
+      wrapperCor.appendChild(labelCor)
+      divGridCar.appendChild(wrapperCor)
+      content.appendChild(divGridCar);
+
+      divGridAluguel.className = 'grid grid-cols-3 gap-3'
+
+      labelIncioAluguel.className = 'text-sky-800 mb-2 w-full'
+      labelIncioAluguel.textContent = 'Início do aluguel';
+      
+      inputIncioAluguel.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputIncioAluguel.value = data.data_inicio
+      inputIncioAluguel.readOnly = true;
+      inputIncioAluguel.name = ''
+      
+      labelIncioAluguel.append(inputIncioAluguel)
+      divGridAluguel.appendChild(labelIncioAluguel)
+
+      content.appendChild(divGridAluguel);
+
+      labelFimAluguel.className = 'text-sky-800 mb-2 w-full'
+      labelFimAluguel.textContent = 'Fim do aluguel';
+      
+      inputFimAluguel.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputFimAluguel.value = data.data_fim
+      inputFimAluguel.readOnly = true;
+      inputFimAluguel.name = ''
+      
+      labelFimAluguel.append(inputFimAluguel)
+      divGridAluguel.appendChild(labelFimAluguel)
+
+      content.appendChild(divGridAluguel);
+
+      labelValorFinal.className = 'text-sky-800 mb-2 w-full'
+      labelValorFinal.textContent = 'Valor total';
+      
+      inputValorFinal.className = 'w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputValorFinal.value = data.valor_total
+      inputValorFinal.readOnly = true;
+      inputValorFinal.name = ''
+      
+      labelValorFinal.append(inputValorFinal)
+      divGridAluguel.appendChild(labelValorFinal)
+
+      content.appendChild(divGridAluguel);
+
+      labelFoto.className = 'text-sky-800 mb-2 w-full'
+      labelFoto.textContent = 'Foto';
+
+      fotoCar.src = data.foto
+      fotoCar.className = 'h-40 w-40 rounded-md shadow-md'
+
+      labelFoto.append(fotoCar);
+      content.appendChild(labelFoto)
+
+      labelNomeCliente.className = 'text-sky-800 mb-2 w-full'
+      labelNomeCliente.textContent = 'Nome do cliente';
+
+      inputNomeCliente.className = 'mt-3 w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out text-black';
+      inputNomeCliente.value = data.nome_cliente
+      inputNomeCliente.readOnly = true;
+      inputNomeCliente.name = ''
+
+      labelNomeCliente.append(inputNomeCliente);
+      content.appendChild(labelNomeCliente)
+
+      labelStatus.className = 'text-sky-800 mb-2 w-full'
+      labelStatus.textContent = 'Status: ';
+
+      textStatus.className = data.status === 'Aguardando Confirmação' && 'text-yellow-500'
+      textStatus.className = data.status === 'Confirmado' && 'text-green-500'
+      textStatus.className = data.status === 'Rejeitado' && 'text-red-500'
+      textStatus.textContent = data.status
+
+      labelStatus.append(textStatus);
+      content.appendChild(labelStatus)
+
+      buttonConfirmar.className = 'p-2 bg-green-500 text-white rounded m-2'
+      buttonRejeitar.className = 'p-2 bg-red-500 text-white rounded m-2'
+      buttonCancel.className = 'bg-white p-2 m-2 rounded hover:bg-orange-600 hover:text-white text-orange-600 transition-colors focus:ring-2 focus:ring-orange-500 border border-orange-400'
+    
+      buttonCancel.textContent = 'Fechar'
+      buttonConfirmar.textContent = 'Confirmar'
+      buttonRejeitar.textContent = 'Rejeitar'
+
+      buttonCancel.type = 'button'
+
+      idUser.name = 'user_id';
+      idUser.type = 'hidden';
+      idUser.value = data._id
+
+      wrapperButton.className = 'flex items-center p-4 w-full flex items-center justify-end'
+
+      wrapperButton.appendChild(buttonCancel)
+      wrapperButton.appendChild(buttonConfirmar)
+      wrapperButton.appendChild(buttonRejeitar)
+      content.append(inputStatusData)
+
+      content.appendChild(wrapperButton)
+
+    }
+
+    buttonCancel.addEventListener('click', (e) => {
+      e.preventDefault()
+      camposProduto.classList.add('hidden')
+    });
+
+    buttonConfirmar.addEventListener('click', (e) => {
+      inputStatusData.value = 'Confirmado'
+    });
+
+    buttonRejeitar.addEventListener('click', (e) => {
+      inputStatusData.value = 'Rejeitado'
+    });
+
+
+  </script>
+</body>
+</html>

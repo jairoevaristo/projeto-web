@@ -4,10 +4,12 @@ const multer = require("multer");
 const AdminRepository = require("./respositories/AdminRepository");
 const CarRepository = require("./respositories/CarRepository");
 const multerConfigAdmin = require("./libs/multer.admin");
+const AluguelRepository = require("./respositories/AluguelRepository");
 
 const routesAdmin = Router();
 const adminRepository = new AdminRepository();
 const carRepository = new CarRepository();
+const aluguelRepository = new AluguelRepository();
 
 routesAdmin.get("/signin", (req, res) => {
   const message = req.flash("login-error");
@@ -50,8 +52,9 @@ routesAdmin.use(async (req, res, next) => {
   next();
 });
 
-routesAdmin.get("/loja", (req, res) => {
-  return res.render("admin/loja");
+routesAdmin.get("/loja", async (req, res) => {
+  const cars = await carRepository.findAll();
+  return res.render("admin/loja", { cars });
 });
 
 routesAdmin.get("/usuarios", async (req, res) => {
@@ -129,9 +132,66 @@ routesAdmin.post(
       valor: valor_carro,
     });
 
-    console.log(car);
     return res.json(car);
   }
 );
+
+routesAdmin.get("/loja/edit-carro/:id", async (req, res) => {
+  const { id } = req.params;
+  const message = req.flash("edit_car");
+  const car = await carRepository.findCarById(id);
+
+  return res.render("admin/edit-car", { message, car });
+});
+
+routesAdmin.post(
+  "/loja/edit-carro",
+  multer(multerConfigAdmin).single("avatar"),
+  async (req, res) => {
+    const { nome, marca, preco_diaria, valor, cor, id } = req.body;
+    const avatar = req.file;
+
+    const car = await carRepository.updateCarById(id, {
+      nome,
+      marca,
+      preco_diaria,
+      valor,
+      cor,
+      avatar,
+    });
+
+    if (car) {
+      console.log(car);
+      return res.json(car);
+    }
+
+    console.log(car);
+  }
+);
+
+routesAdmin.get("/usuarios", async (req, res) => {
+  const admins = await adminRepository.findAll();
+
+  return res.render("admin/users", { admins });
+});
+
+routesAdmin.get("/alugueis", async (req, res) => {
+  const alugueis = await aluguelRepository.findAll();
+  console.log(alugueis);
+
+  return res.render("admin/aluguel", { alugueis });
+});
+
+routesAdmin.post("/aluguel", async (req, res) => {
+  const { status, id } = req.body;
+
+  console.log();
+
+  const aluguel = await aluguelRepository.updateStatus(id, { status });
+
+  if (aluguel) {
+    return res.redirect("/admin/alugueis");
+  }
+});
 
 module.exports = routesAdmin;

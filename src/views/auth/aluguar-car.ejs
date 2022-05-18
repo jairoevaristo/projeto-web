@@ -12,6 +12,36 @@
   <title>CartHend</title>
 </head>
 <body>
+  <header class="flex items-center justify-between border-b-2 border-gray-100 mb-12 px-4 py-2">
+    <a href="/loja">
+      <img src="/assets/header.png" />
+    </a>
+
+    <ul class="flex item-center justify-center">
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/loja/aluguel" class="p-4 text-sky-800 text-lg">
+          Meus alugueis
+        </a>
+      </li>
+      <li class="flex items-center">
+        <div class="h-8 w-[2px] bg-sky-800 mx-2"></div>
+      </li>
+      <li class="hover:bg-gray-100 transition-colors rounded flex items-center">
+        <a href="/loja/conta" class="p-4 text-sky-800 text-lg">
+          Minha conta
+        </a>
+      </li>
+
+      <li class="ml-8 flex items-center">
+        <div class="flex items-center">
+          <img src=<%=avatar %> class="rounded-full w-10 h-10 mr-3" />
+          <span class="text-sky-800 text-lg">
+            <%= nome%>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </header>
   <div class="container mx-auto max-w-3xl">
     <div class="flex flex-col mt-[60px]">
       <h1 class="text-orange-600 text-7xl text-center">Informações do aluguel</h1>
@@ -44,6 +74,8 @@
             <div class="w-10 h-10 rounded-full" style="background-color: <%= car.cor%>;"></div>
           </div>
 
+          <input type="hidden" name="pagamento" id="pagamento" />
+
         </div>
         </div>
         <div class="border-b-2 p-2 w-full"></div>
@@ -74,7 +106,7 @@
 
             <div>
               <label class="text-sky-800 mb-1">Valor final</label>
-              <input id="valor_final" required type="text" name="valor_final" placeholder="Valor final" disabled class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
+              <input id="valor_final" required type="text" name="valor_final" placeholder="Valor final" readonly class="w-full border outline-none border-gray-300 rounded p-2 mb-4 focus:ring-2 focus:border-blue-200 focus:ring-blue-200 transition duration-300 ease-in-out" />
             </div>
           </div>
 
@@ -113,6 +145,7 @@
     const fimAluguel = document.querySelector('#fim_aluguel');
     const valorFinal = document.querySelector('#valor_final');
     const precoDiaria = document.querySelector('#preco_diaria');
+    const pagamento = document.querySelector('#pagamento');
 
     const Pix = document.querySelector('#Pix');
     const Cartão = document.querySelector('#Cartão');
@@ -139,13 +172,6 @@
 
     function setarTipoPagamento(tipoPagamento) {
       if (currentTipoPagamento === tipoPagamento) {
-        Object.keys(tipoPagamentoStyle).forEach(item => {
-          if (item !== currentTipoPagamento) {
-            tipoPagamentoStyle[item].classList.remove("pointer-events-none")
-            return;
-          }
-        })
-        
         currentTipoPagamento = "";
         tipoPagamentoStyle[tipoPagamento].className = "transition-all w-60 h-60 bg-white shadow-sm border border-gray-200 flex items-center justify-center flex-col rounded-md cursor-pointer hover:scale-90"
       } else {
@@ -154,13 +180,14 @@
 
         Object.keys(tipoPagamentoStyle).forEach(item => {
           if (item !== currentTipoPagamento) {
-            tipoPagamentoStyle[item].className = "transition-all w-60 h-60 bg-white shadow-sm border border-gray-200 flex items-center justify-center flex-col rounded-md cursor-pointer hover:scale-90 pointer-events-none"
+            tipoPagamentoStyle[item].classList.remove("border-sky-800");
+            tipoPagamentoStyle[item].classList.add("border-gray-200");
             return;
           }
         })
       }
 
-      console.log(currentTipoPagamento);
+      pagamento.value = currentTipoPagamento;
     }
 
     function calcValorFinal() {
