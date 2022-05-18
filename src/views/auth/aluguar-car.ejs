@@ -195,13 +195,10 @@
     }
 
     function calcValorFinal() {
-     
-
-      if (new Date(inicioAluguel.value).setDate(new Date(inicioAluguel.value) + 1) < Date.now() || new Date(fimAluguel.value).setDate(new Date(fimAluguel.value) + 1) < Date.now()) {
+     if (Date.parse(inicioAluguel.value) > Date.parse(fimAluguel.value)) {
         alert('Informe dadas válidas')
         return;
-      }
-
+     }
 
       let day1 = new Date(inicioAluguel.value); 
       let day2 = new Date(fimAluguel.value);
