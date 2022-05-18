@@ -55,6 +55,10 @@ class CarRepository {
       return carUpdate;
     }
   }
+
+  async removeCar(id) {
+    await Car.findByIdAndDelete(id);
+  }
 }
 
 module.exports = CarRepository;

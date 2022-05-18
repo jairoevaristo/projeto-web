@@ -161,11 +161,8 @@ routesAdmin.post(
     });
 
     if (car) {
-      console.log(car);
       return res.json(car);
     }
-
-    console.log(car);
   }
 );
 
@@ -192,6 +189,13 @@ routesAdmin.post("/aluguel", async (req, res) => {
   if (aluguel) {
     return res.redirect("/admin/alugueis");
   }
+});
+
+routesAdmin.get("/loja/remove-carro/:id", async (req, res) => {
+  const { id } = req.params;
+  await carRepository.removeCar(id);
+
+  return res.redirect("/admin/loja");
 });
 
 module.exports = routesAdmin;
