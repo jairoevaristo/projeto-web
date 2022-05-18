@@ -41,11 +41,7 @@ class AdminRepository {
   }
 
   async updateAdminById(id, { nome, email, telefone, login, senha, status }) {
-    const adminExists = await Admin.findOne({ login });
-
-    if (adminExists) {
-      return { message: "Login já cadastrado" };
-    }
+    
 
     if (senha) {
       const passwordHash = await hash(senha, 8);
