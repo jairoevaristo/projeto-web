@@ -44,7 +44,7 @@ class CarRepository {
             ? format(addDays(item.data_aluguel, 1), "dd/MM/yyyy")
             : "",
         status:
-          Date.parse(item.data_aluguel) < Date.now()
+          Date.parse(item.data_aluguel) >= Date.now()
             ? "INDISPONÍVEL"
             : "DISPONÍVEL",
       };
@@ -57,11 +57,11 @@ class CarRepository {
     const cars = await Car.find();
     const carsFilter = cars.filter(
       (item) =>
-        item.data_aluguel <= new Date().toISOString(Date.now()) ||
+        item.data_aluguel >= new Date().toISOString(Date.now()) ||
         !item.data_aluguel
     );
 
-    console.log("ds");
+    console.log("ds", carsFilter, new Date().toISOString(Date.now()));
 
     return carsFilter;
   }

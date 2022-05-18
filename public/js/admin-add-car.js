@@ -34,6 +34,11 @@ buttonSubmit.addEventListener("click", (e) => {
     return;
   }
 
+  if (preco_diaria.value === "0" || valor_carro.value === "0") {
+    alert("Os valores devem ser diferente de zero");
+    return;
+  }
+
   e.preventDefault();
   const data = new FormData();
 

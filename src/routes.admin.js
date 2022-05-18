@@ -59,9 +59,10 @@ routesAdmin.get("/loja", async (req, res) => {
 });
 
 routesAdmin.get("/usuarios", async (req, res) => {
+  const message = req.flash("edit_user");
   const admins = await adminRepository.findAll();
 
-  return res.render("admin/users", { admins });
+  return res.render("admin/users", { admins, message });
 });
 
 routesAdmin.get("/add-usuario", (req, res) => {
@@ -92,6 +93,7 @@ routesAdmin.post("/add-usuario", async (req, res) => {
 
 routesAdmin.post("/editar-usuario", async (req, res) => {
   const { nome, email, telefone, login, senha, status, user_id } = req.body;
+  let message = "";
 
   const user = await adminRepository.updateAdminById(user_id, {
     nome,
@@ -102,9 +104,13 @@ routesAdmin.post("/editar-usuario", async (req, res) => {
     status,
   });
 
-  if (user) {
+  if (user.message) {
+    message = user.message;
+    req.flash("edit_user", message);
     return res.redirect("/admin/usuarios");
   }
+
+  return res.redirect("/admin/usuarios");
 });
 
 routesAdmin.get("/loja/add-carro", (req, res) => {

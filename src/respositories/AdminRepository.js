@@ -6,10 +6,7 @@ class AdminRepository {
     const passwordHash = await hash(senha, 8);
     const adminExistsLogin = await Admin.findOne({ login });
 
-    console.log("adminExistsLogin", adminExistsLogin);
-
     if (adminExistsLogin) {
-      console.log("opa", adminExistsLogin);
       return { message: "Login já cadastrado" };
     }
 
@@ -26,8 +23,6 @@ class AdminRepository {
   }
 
   async login(login, senha) {
-    console.log({ login, senha });
-
     const adminExists = await Admin.findOne({ login });
 
     if (!adminExists) {
@@ -48,9 +43,8 @@ class AdminRepository {
   async updateAdminById(id, { nome, email, telefone, login, senha, status }) {
     const adminExists = await Admin.findOne({ login });
 
-    if (!adminExists) {
-      console.log("Admin não encontrado");
-      return;
+    if (adminExists) {
+      return { message: "Login já cadastrado" };
     }
 
     if (senha) {
