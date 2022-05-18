@@ -4,13 +4,18 @@ const Aluguel = require("../entities/Aluguel");
 
 class CarRepository {
   async create({ nome, marca, valor, preco_diaria, cor, foto }) {
+    const fotoSave = `${process.env.DOMAIN_APP}/cars/${foto.filename.replace(
+      " ",
+      "-"
+    )}`;
+
     const cars = await Car.create({
       nome,
       marca,
       valor,
       preco_diaria,
       cor,
-      foto,
+      foto: fotoSave,
     });
 
     return cars;

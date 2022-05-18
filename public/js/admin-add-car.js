@@ -29,6 +29,11 @@ avatar.addEventListener("change", (e) => {
 });
 
 buttonSubmit.addEventListener("click", (e) => {
+  if (imageProfile.src.startsWith("data:image/")) {
+    alert("Incluia uma imagem para o carro");
+    return;
+  }
+
   e.preventDefault();
   const data = new FormData();
 

@@ -119,14 +119,11 @@ routesAdmin.post(
     const { nome, marca, preco_diaria, valor_carro, cor } = req.body;
     const avatar = req.file;
 
-    const foto = `${process.env.DOMAIN_APP}/cars/${avatar.filename.replace(
-      " ",
-      "-"
-    )}`;
+    console.log(avatar);
 
     const car = await carRepository.create({
       cor,
-      foto,
+      foto: avatar,
       marca,
       nome,
       preco_diaria,
