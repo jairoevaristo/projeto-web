@@ -1,5 +1,3 @@
-# Projeto I da Disciplina de Desenvolvimento web
-
 ## Para rodar a aplicação siga os passos abaixo
 
 - 1 Realizar o clone da aplicação
