@@ -33,5 +33,5 @@ Por fim acesse o endereço `localhost:3000/` onde o projeto está rodando
 
 ## Links úteis
 
-[Link do layout no figma](https://www.figma.com/file/ezgcu7LTvCWOiK9OQQtC1z/CartHed?node-id=0%3A1)
+[Link do layout no figma](https://www.figma.com/file/ezgcu7LTvCWOiK9OQQtC1z/CartHed?node-id=0%3A1)<br>
 [Link do projeto rodando na web](https://projeto-web-production.up.railway.app/)
